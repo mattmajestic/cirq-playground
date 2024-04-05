@@ -1,0 +1,8 @@
+services:
+  panel-app:
+    build:
+      context: .
+    ports:
+      - "5006:5006"
+    environment:
+      - BOKEH_ALLOW_WS_ORIGIN=*
