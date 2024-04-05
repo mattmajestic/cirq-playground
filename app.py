@@ -42,7 +42,6 @@ circuit = cirq.Circuit(
     cirq.measure(qubit, key='m')  # Measurement.
 )''')
 
-st.snow()
 # Display simulation results
 st.markdown('### Simulation Results')
 st.markdown(f'Results of simulating the circuit {repetitions} times:')
