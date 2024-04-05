@@ -5,18 +5,21 @@ import pandas as pd
 # Set the page title and icon
 st.set_page_config(layout='wide', page_title='Cirq Playground', page_icon="🚀")
 
-# Pick a qubit.
-qubit = cirq.GridQubit(0, 0)
+# Create a sidebar for input
+with st.sidebar:
+    st.markdown('### Simulation Settings')
+    repetitions = st.number_input('Number of Simulations', min_value=1, value=20)
 
-# Create a circuit
+# Define the circuit
+qubit = cirq.GridQubit(0, 0)
 circuit = cirq.Circuit(
     cirq.X(qubit)**0.5,  # Square root of NOT.
     cirq.measure(qubit, key='m')  # Measurement.
 )
 
-# Simulate the circuit several times.
+# Simulate the circuit
 simulator = cirq.Simulator()
-result = simulator.run(circuit, repetitions=20)
+result = simulator.run(circuit, repetitions=repetitions)
 
 # Extract the measurement results
 counts = result.histogram(key='m')
@@ -33,5 +36,5 @@ st.markdown('This circuit applies the square root of NOT gate (X gate with 0.5 p
 
 # Display simulation results
 st.markdown('### Simulation Results')
-st.markdown('Results of simulating the circuit 20 times:')
+st.markdown(f'Results of simulating the circuit {repetitions} times:')
 st.dataframe(df_counts)
