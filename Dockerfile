@@ -7,14 +7,14 @@ WORKDIR /app
 # Copy the requirements file into the container at /app
 COPY requirements.txt /app/
 
-# Install the required Python libraries
+# Install the required packages
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container at /app
-COPY . /app/
+# Copy the rest of the application code into the container
+COPY . /app
 
-# Expose port 5006 for the Panel app
-EXPOSE 5006
+# Expose the Streamlit default port
+EXPOSE 8501
 
-# Start the Panel app
-CMD ["panel", "serve", "app.py", "--allow-websocket-origin=*"]
+# Command to run the Streamlit app when the container starts
+CMD ["streamlit", "run", "app.py"]

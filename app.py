@@ -1,11 +1,10 @@
-import panel as pn
+import streamlit as st
 import cirq
 import pandas as pd
 from bokeh.plotting import figure
 
-# Set the theme to pn.svelte
-pn.config.sizing_mode = 'stretch_width'
-pn.config.theme = 'dark'
+# Set the theme to 'dark'
+st.set_page_config(layout='wide', page_title='Cirq Playground', page_icon="🚀", theme='dark')
 
 # Pick a qubit.
 qubit = cirq.GridQubit(0, 0)
@@ -32,46 +31,17 @@ p.vbar(x=df_counts['Measurement'].astype(str), top=df_counts['Count'], width=0.9
 p.xgrid.grid_line_color = None
 p.y_range.start = 0
 
-# Create a Panel object for the plot
-plot_pane = pn.pane.Bokeh(p)
+# Display the chart
+st.bokeh_chart(p)
 
-# Define repetitions_input and run_button
-repetitions_input = pn.widgets.IntInput(name='Repetitions', value=20)
-run_button = pn.widgets.Button(name='Run', button_type='primary')
+# Display circuit diagram and description
+st.markdown('## Quantum Circuit')
+st.text(circuit.to_text_diagram(use_unicode_characters=False))
 
-def run_simulation(event):
-    repetitions = repetitions_input.value
-    result = simulator.run(circuit, repetitions=repetitions)
-    counts = result.histogram(key='m')
-    df_counts = pd.DataFrame(counts.items(), columns=['Measurement', 'Count'])
-    p.x_range.factors = df_counts['Measurement'].astype(str).tolist()
-    p.renderers[0].data_source.data = {'x': df_counts['Measurement'].astype(str), 'top': df_counts['Count']}
-    
-    # Update the Panel object with the new plot
-    plot_pane.object = p
+st.markdown('### Circuit Description')
+st.markdown('This circuit applies the square root of NOT gate (X gate with 0.5 power) to qubit (0, 0), then measures the qubit and stores the result in the key "m".')
 
-run_button.on_click(run_simulation)
-
-# Create a Panel dashboard
-dashboard = pn.template.FastListTemplate(
-    title='Cirq Playground',
-    main=[
-        pn.Column(
-            pn.panel('## Quantum Circuit'),
-            pn.panel(circuit.to_text_diagram(use_unicode_characters=False)),
-            pn.panel(['### Circuit Description', 
-                      'This circuit applies the square root of NOT gate (X gate with 0.5 power) to qubit (0, 0), then measures the qubit and stores the result in the key "m".']),
-            pn.panel(['### Simulation Results', 
-                      'Results of simulating the circuit 20 times:',
-                      plot_pane])  # Include the Panel object for the plot
-        )
-    ],
-    sidebar=[
-        pn.panel('### Controls'),
-        repetitions_input,
-        run_button
-    ]
-)
-
-# Display the dashboard
-dashboard.servable()
+# Display simulation results
+st.markdown('### Simulation Results')
+st.markdown('Results of simulating the circuit 20 times:')
+st.dataframe(df_counts)

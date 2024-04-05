@@ -1,5 +1,4 @@
-panel
-numpy
-pandas
+streamlit
 cirq
 bokeh
+pandas
