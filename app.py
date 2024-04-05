@@ -3,8 +3,8 @@ import cirq
 import pandas as pd
 from bokeh.plotting import figure
 
-# Set the theme to 'dark'
-st.set_page_config(layout='wide', page_title='Cirq Playground', page_icon="🚀", theme='dark')
+# Set the page title and icon
+st.set_page_config(layout='wide', page_title='Cirq Playground', page_icon="🚀")
 
 # Pick a qubit.
 qubit = cirq.GridQubit(0, 0)
