@@ -1,7 +1,6 @@
 import streamlit as st
 import cirq
 import pandas as pd
-from bokeh.plotting import figure
 
 # Set the page title and icon
 st.set_page_config(layout='wide', page_title='Cirq Playground', page_icon="🚀")
@@ -22,17 +21,8 @@ result = simulator.run(circuit, repetitions=20)
 # Extract the measurement results
 counts = result.histogram(key='m')
 
-# Convert counts to a DataFrame for plotting
+# Convert counts to a DataFrame for display
 df_counts = pd.DataFrame(counts.items(), columns=['Measurement', 'Count'])
-
-# Create a bar chart
-p = figure(x_range=df_counts['Measurement'].astype(str), height=300, title='Measurement Counts', toolbar_location=None, tools='')
-p.vbar(x=df_counts['Measurement'].astype(str), top=df_counts['Count'], width=0.9)
-p.xgrid.grid_line_color = None
-p.y_range.start = 0
-
-# Display the chart
-st.bokeh_chart(p)
 
 # Display circuit diagram and description
 st.markdown('## Quantum Circuit')
